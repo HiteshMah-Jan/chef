@@ -1120,7 +1120,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
-          options default_options
+          options "--nogpgcheck --disablerepo=*"
           action :upgrade
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -1130,7 +1130,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         flush_cache
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
-          options default_options
+          options "--nogpgcheck --disablerepo=*"
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
