@@ -52,6 +52,8 @@ class Chef
           end
 
           def start
+            # For some reason we have to force python to unbuffered here, and then force the input pipe back to line
+            # buffered in the python code.  XXX: I tried to remove this but hit more issues in the python side.
             ENV["PYTHONUNBUFFERED"] = "1"
             @inpipe, inpipe_write = IO.pipe
             outpipe_read, @outpipe = IO.pipe
@@ -75,6 +77,7 @@ class Chef
               stderr.close unless stderr.nil?
               inpipe.close unless inpipe.nil?
               outpipe.close unless outpipe.nil?
+              stdin = stdout = stderr = inpipe = outpipe = wait_thr = nil
             end
           end
 
@@ -151,7 +154,7 @@ class Chef
               outpipe.syswrite json + "\n"
               output = inpipe.sysread(4096).chomp
               Chef::Log.trace "got '#{output}' from python helper"
-              return output
+              output
             end
           end
 
@@ -201,7 +204,7 @@ class Chef
             ret
           rescue EOFError, Errno::EPIPE, Timeout::Error, Errno::ESRCH => e
             output = drain_fds
-            if ( max_retries -= 1 ) > 0
+            if ( max_retries -= 1 ) > 0 && !ENV["DNF_HELPER_NO_RETRIES"]
               unless output.empty?
                 Chef::Log.trace "discarding output on stderr/stdout from python helper: #{output}"
               end

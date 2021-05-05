@@ -51,7 +51,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
   before(:each) do
     # force errors to fail and not retry
-    ENV["YUM_HELPER_NO_RETRIES"] = "true"
+    ENV["DNF_HELPER_NO_RETRIES"] = "true"
     File.open("/etc/yum.repos.d/chef-dnf-localtesting.repo", "w+") do |f|
       f.write <<~EOF
         [chef-dnf-localtesting]
