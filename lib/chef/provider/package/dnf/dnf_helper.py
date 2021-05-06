@@ -155,17 +155,18 @@ if len(sys.argv) < 3:
   inpipe = sys.stdin
   outpipe = sys.stdout
 else:
-  inpipe = os.fdopen(int(sys.argv[1]), "r")
-  outpipe = os.fdopen(int(sys.argv[2]), "w")
+    os.set_blocking(int(sys.argv[1]), True)
+    inpipe = os.fdopen(int(sys.argv[1]), "r")
+    outpipe = os.fdopen(int(sys.argv[2]), "w")
 
 try:
+    setup_exit_handler()
     while 1:
         # stop the process if the parent proc goes away
         ppid = os.getppid()
         if ppid == 1:
             raise RuntimeError("orphaned")
 
-        setup_exit_handler()
         line = inpipe.readline()
 
         # only way to detect EOF in python
