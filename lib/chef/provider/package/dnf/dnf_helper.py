@@ -79,11 +79,11 @@ def versioncompare(versions):
     sack = get_sack()
     if (versions[0] is None) or (versions[1] is None):
         outpipe.write('0\n')
-      outpipe.flush()
-  else:
-      evr_comparison = dnf.rpm.rpm.labelCompare(version_tuple(versions[0]), version_tuple(versions[1]))
-      outpipe.write('{}\n'.format(evr_comparison))
-      outpipe.flush()
+        outpipe.flush()
+    else:
+        evr_comparison = dnf.rpm.rpm.labelCompare(version_tuple(versions[0]), version_tuple(versions[1]))
+        outpipe.write('{}\n'.format(evr_comparison))
+        outpipe.flush()
 
 def query(command):
     sack = get_sack()
@@ -153,7 +153,7 @@ def setup_exit_handler():
 
 if len(sys.argv) < 3:
     inpipe = sys.stdin
-  outpipe = sys.stdout
+    outpipe = sys.stdout
 else:
     os.set_blocking(int(sys.argv[1]), True)
     inpipe = os.fdopen(int(sys.argv[1]), "r")
