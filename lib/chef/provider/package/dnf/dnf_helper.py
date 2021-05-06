@@ -78,9 +78,9 @@ def version_tuple(versionstr):
 def versioncompare(versions):
     sack = get_sack()
     if (versions[0] is None) or (versions[1] is None):
-      outpipe.write('0\n')
+        outpipe.write('0\n')
       outpipe.flush()
-    else:
+  else:
       evr_comparison = dnf.rpm.rpm.labelCompare(version_tuple(versions[0]), version_tuple(versions[1]))
       outpipe.write('{}\n'.format(evr_comparison))
       outpipe.flush()
@@ -152,7 +152,7 @@ def setup_exit_handler():
     signal.signal(signal.SIGQUIT, exit_handler)
 
 if len(sys.argv) < 3:
-  inpipe = sys.stdin
+    inpipe = sys.stdin
   outpipe = sys.stdout
 else:
     os.set_blocking(int(sys.argv[1]), True)
