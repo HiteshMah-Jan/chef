@@ -1,5 +1,6 @@
 # THIS IS NOW HAND MANAGED, JUST EDIT THE THING
 # keep it machine-parsable since CI uses it
+# Data element : diabetic_patient
 #
 # NOTE: You MUST update omnibus-software when adding new versions of
 # software here: bundle exec rake dependencies:update_omnibus_gemfile_lock
